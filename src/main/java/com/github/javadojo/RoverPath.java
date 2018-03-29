@@ -28,27 +28,49 @@ public class RoverPath {
     }
 
     public void moveNorth() {
-        ArrayList<String> newRow = new ArrayList<>();
         rowRoverIndex--;
-        if (rowRoverIndex == -1) {
-            map.add(0, newRow);
-            initNorthRow(newRow);
+        if (isOutsideMap()) {
+            List<String> newRow = addNewNorthRow();
             newRow.add(columnRoverIndex, NORTH_SOUTH);
         }
         else {
-            if(map.get(rowRoverIndex).get(columnRoverIndex).equals(BLANK)) {
+            if(map.get(rowRoverIndex).get(columnRoverIndex).equals(BLANK))
                 map.get(rowRoverIndex).set(columnRoverIndex, NORTH_SOUTH);
-            }
-            else {
+            else
                 addCrossroad();
-            }
         }
         rowRoverIndex = Math.max(0, rowRoverIndex);
     }
 
-    private void initNorthRow(ArrayList<String> newRow) {
+    private List<String> addNewNorthRow() {
+        List<String> newRow = new ArrayList<>();
+        map.add(0, newRow);
+        initNorthRow(newRow);
+        return newRow;
+    }
+
+    private void initNorthRow(List<String> newRow) {
         for (int i = 0; i < map.get(1).size()-1; i++)
             newRow.add(0, BLANK);
+    }
+
+    public void moveSouth() {
+        rowRoverIndex++;
+        if (isOutsideMap()) {
+            ArrayList<String> newRow = addNewSouthRow();
+            newRow.add(NORTH_SOUTH);
+        }
+        else
+            map.get(rowRoverIndex).set(columnRoverIndex, NORTH_SOUTH);
+
+    }
+
+    private ArrayList<String> addNewSouthRow() {
+        ArrayList<String> newRow;
+        newRow = new ArrayList<>();
+        initSouthRow(newRow);
+        map.add(newRow);
+        return newRow;
     }
 
     private void initSouthRow(ArrayList<String> newRow) {
@@ -56,36 +78,8 @@ public class RoverPath {
             newRow.add(0, BLANK);
     }
 
-    public void moveSouth() {
-        ArrayList<String> row;
-        rowRoverIndex++;
-        if (rowRoverIndex == map.size()) {
-            row = new ArrayList<>();
-            initSouthRow(row);
-            map.add(row);
-            row.add(NORTH_SOUTH);
-        }
-        else {
-            map.get(rowRoverIndex).set(columnRoverIndex, NORTH_SOUTH);
-        }
-
-    }
-
-    public String draw() {
-        StringBuilder sb = new StringBuilder();
-
-        for (int j = 0; j < map.size(); j++) {
-            for (int i = 0; i < map.get(j).size(); i++) {
-                String cell = map.get(j).get(i);
-                if(j == rowRoverIndex && i == columnRoverIndex)
-                    sb.append(CURRENT);
-                else
-                    sb.append(cell);
-            }
-            sb.append(LINE_SEPARATOR);
-        }
-
-        return sb.toString();
+    private boolean isOutsideMap() {
+        return rowRoverIndex == -1 || rowRoverIndex == map.size();
     }
 
     public void addCrossroad() {
@@ -95,6 +89,22 @@ public class RoverPath {
 
     private boolean canAddCrossroad() {
         return (columnRoverIndex > 0 || rowRoverIndex > 0) && !map.get(rowRoverIndex).get(columnRoverIndex).equals(SAMPLE);
+    }
+
+    public String draw() {
+        StringBuilder sb = new StringBuilder();
+
+        for (int j = 0; j < map.size(); j++) {
+            for (int i = 0; i < map.get(j).size(); i++) {
+                if(j == rowRoverIndex && i == columnRoverIndex)
+                    sb.append(CURRENT);
+                else
+                    sb.append(map.get(j).get(i));
+            }
+            sb.append(LINE_SEPARATOR);
+        }
+
+        return sb.toString();
     }
 
     public void takeSample() {
