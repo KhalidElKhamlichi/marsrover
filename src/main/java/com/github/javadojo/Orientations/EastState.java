@@ -1,4 +1,6 @@
-package com.github.javadojo;
+package com.github.javadojo.Orientations;
+
+import com.github.javadojo.MarsRover;
 
 public class EastState implements FacingState {
 

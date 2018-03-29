@@ -1,7 +1,7 @@
 package com.github.javadojo;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.github.javadojo.Orientations.EastState;
+import com.github.javadojo.Orientations.FacingState;
 
 /**
  * The Mars rover is programmed to drive around Mars.

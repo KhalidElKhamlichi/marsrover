@@ -3,6 +3,7 @@ package com.github.javadojo;
 import java.util.ArrayList;
 import java.util.List;
 import static com.github.javadojo.MarsRover.LINE_SEPARATOR;
+import static com.github.javadojo.PathSymbols.*;
 
 public class RoverPath {
 
@@ -10,19 +11,20 @@ public class RoverPath {
     private int rowRoverIndex = 0;
     private int columnRoverIndex = 0;
 
+
     public RoverPath() {
         map.add(new ArrayList<String>());
-        map.get(0).add("X");
+        map.get(0).add(LANDING);
     }
 
     public void moveWest() {
         columnRoverIndex--;
-        map.get(map.size()-1).set(columnRoverIndex, "-");
+        map.get(map.size()-1).set(columnRoverIndex, WEST_EAST);
     }
 
     public void moveEast() {
-        map.get(map.size()-1).add("-");
         columnRoverIndex++;
+        map.get(map.size()-1).add(WEST_EAST);
     }
 
     public void moveNorth() {
@@ -31,11 +33,11 @@ public class RoverPath {
         if (rowRoverIndex == -1) {
             map.add(0, newRow);
             initNorthRow(newRow);
-            newRow.add(columnRoverIndex, "|");
+            newRow.add(columnRoverIndex, NORTH_SOUTH);
         }
         else {
-            if(map.get(rowRoverIndex).get(columnRoverIndex).equals(" ")) {
-                map.get(rowRoverIndex).set(columnRoverIndex, "|");
+            if(map.get(rowRoverIndex).get(columnRoverIndex).equals(BLANK)) {
+                map.get(rowRoverIndex).set(columnRoverIndex, NORTH_SOUTH);
             }
             else {
                 addCrossroad();
@@ -46,12 +48,12 @@ public class RoverPath {
 
     private void initNorthRow(ArrayList<String> newRow) {
         for (int i = 0; i < map.get(1).size()-1; i++)
-            newRow.add(0, " ");
+            newRow.add(0, BLANK);
     }
 
     private void initSouthRow(ArrayList<String> newRow) {
         for (int i = 0; i < map.get(map.size()-1).size()-1; i++)
-            newRow.add(0, " ");
+            newRow.add(0, BLANK);
     }
 
     public void moveSouth() {
@@ -61,10 +63,10 @@ public class RoverPath {
             row = new ArrayList<>();
             initSouthRow(row);
             map.add(row);
-            row.add("|");
+            row.add(NORTH_SOUTH);
         }
         else {
-            map.get(rowRoverIndex).set(columnRoverIndex, "|");
+            map.get(rowRoverIndex).set(columnRoverIndex, NORTH_SOUTH);
         }
 
     }
@@ -76,7 +78,7 @@ public class RoverPath {
             for (int i = 0; i < map.get(j).size(); i++) {
                 String cell = map.get(j).get(i);
                 if(j == rowRoverIndex && i == columnRoverIndex)
-                    sb.append("*");
+                    sb.append(CURRENT);
                 else
                     sb.append(cell);
             }
@@ -88,14 +90,14 @@ public class RoverPath {
 
     public void addCrossroad() {
         if (canAddCrossroad())
-            map.get(rowRoverIndex).set(columnRoverIndex, "+");
+            map.get(rowRoverIndex).set(columnRoverIndex, CROSSROAD);
     }
 
     private boolean canAddCrossroad() {
-        return (columnRoverIndex > 0 || rowRoverIndex > 0) && !map.get(rowRoverIndex).get(columnRoverIndex).equals("S");
+        return (columnRoverIndex > 0 || rowRoverIndex > 0) && !map.get(rowRoverIndex).get(columnRoverIndex).equals(SAMPLE);
     }
 
     public void takeSample() {
-        map.get(rowRoverIndex).set(columnRoverIndex, "S");
+        map.get(rowRoverIndex).set(columnRoverIndex, SAMPLE);
     }
 }

@@ -1,4 +1,4 @@
-package com.github.javadojo;
+package com.github.javadojo.Orientations;
 
 public interface FacingState {
 
