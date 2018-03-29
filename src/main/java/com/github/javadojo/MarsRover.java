@@ -1,5 +1,8 @@
 package com.github.javadojo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The Mars rover is programmed to drive around Mars.
  * Its programming is very simple. The commands are the following:
@@ -35,26 +38,83 @@ public class MarsRover {
 
     static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
+    private FacingState facingState;
+    private RoverPath roverPath = new RoverPath();
+
     public MarsRover(String operations) {
+        facingState = new EastState(this);
+
+        startOperations(operations);
+    }
+
+    private void startOperations(String operations) {
+        for (int i = 0; i < operations.length(); i++) {
+            startOperation(operations.charAt(i));
+        }
+    }
+
+    private void startOperation(char operation) {
+        switch (operation) {
+            case 's':
+                moveForward();
+                break;
+            case 'l':
+                turnLeft();
+                break;
+            case 'r':
+                turnRight();
+                break;
+            case 'S':
+                takeSample();
+                break;
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
 
     public String path() {
-        throw new IllegalStateException("Not implemented");
+        return roverPath.draw();
     }
 
     public MarsRover turnLeft() {
-        throw new IllegalStateException("Not implemented");
+        roverPath.addCrossroad();
+        facingState.turnLeft();
+        return this;
     }
 
     public MarsRover turnRight() {
-        throw new IllegalStateException("Not implemented");
+        roverPath.addCrossroad();
+        facingState.turnRight();
+        return this;
     }
 
     public MarsRover moveForward() {
-        throw new IllegalStateException("Not implemented");
+        facingState.moveForward();
+        return this;
     }
 
     public MarsRover takeSample() {
-        throw new IllegalStateException("Not implemented");
+        roverPath.takeSample();
+        return this;
+    }
+
+    public void moveEast() {
+        roverPath.moveEast();
+    }
+
+    public void moveNorth() {
+        roverPath.moveNorth();
+    }
+
+    public void moveSouth() {
+        roverPath.moveSouth();
+    }
+
+    public void moveWest() {
+        roverPath.moveWest();
+    }
+
+    public void setState(FacingState state) {
+        this.facingState = state;
     }
 }
